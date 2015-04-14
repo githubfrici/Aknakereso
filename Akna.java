@@ -35,8 +35,8 @@ public class Akna{
 }
 
 
-   
-    private class ListenForButton implements ActionListener{
+   	// Implements ActionListener so it can react to events on components
+    	private class ListenForButton implements ActionListener{
 	     
 	    // This method is called when an event occurs
 	     
@@ -58,4 +58,70 @@ public class Akna{
 	        }
 	         
     }
+    }
+    
+    	// By using KeyListener you can track keys on the keyboard
+	private class ListenForKeys implements KeyListener{
+		
+		// Handle the key typed event from the text field.
+	    public void keyTyped(KeyEvent e) {
+	    	textArea1.append("Key Hit: " + e.getKeyChar() + "\n"); 
+	    }
+
+	    // Handle the key-pressed event from the text field.
+	    public void keyPressed(KeyEvent e) {
+	        
+	    }
+
+	    // Handle the key-released event from the text field.
+	    public void keyReleased(KeyEvent e) {
+	        
+	    }
+		
+	}
+	
+	private class ListenForMouse implements MouseListener{
+
+		// Called when a mouse button is clicked
+		
+		public void mouseClicked(MouseEvent e) {
+			
+			textArea1.append("Mouse Panel Pos: " + e.getX() + " " + e.getY() + "\n");
+			textArea1.append("Mouse Screen Pos: " + e.getXOnScreen() + " " + e.getYOnScreen() + "\n"); 
+			textArea1.append("Mouse Button: " + e.getButton()  + "\n"); 
+			textArea1.append("Mouse Clicks: " + e.getClickCount()  + "\n");
+			
+		}
+
+		// Called when the mouse enters the component assigned
+		// the MouseListener
+		
+		public void mouseEntered(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		// Called when the mouse leaves the component assigned
+		// the MouseListener
+		
+		public void mouseExited(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		// Mouse button pressed
+		
+		public void mousePressed(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		// Mouse button released
+		
+		public void mouseReleased(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}
 	     
