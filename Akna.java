@@ -1,12 +1,33 @@
 import javax.swing.*;
 
 
-public class Akna{
+public class Akna extend JButton{
     public int sorszam=0;
     private int szomszedosBombak=0;
     private boolean vanBomba=false;
+    private boolean felVanFedve=false;
+    
+    public void felfed(){
+    	this.felVanFedve=true;
+    	this.setBorderPainted(false);
+        this.setContentAreaFilled(false);
+        if(szomszedosBombak==0){
+        	this.setText("");
+        	felderit();
+        }else{
+        	this.setText(szomszedosBombak);
+        }
+    }	
 
-
+    public void megjelol(){
+    	
+    }
+    
+    public void felderit(){
+    	
+    }    
+    
+    
     public static void main(String[] args){
         JFrame theBoard = new JFrame();
         theBoard.setSize(400,400);
