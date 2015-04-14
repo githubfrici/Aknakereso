@@ -1,148 +1,170 @@
+import java.awt.GridLayout;
+import java.awt.event.*;
+
 import javax.swing.*;
 
 
-public class Akna extend JButton{
-    public int sorszam=0;
-    private int szomszedosBombak=0;
-    private boolean vanBomba=false;
+public class Akna extends JButton{
+   
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID =1L;
+	
+	public int xPosition=0;
+	public int yPosition=0;
+	public boolean vanBomba=false;
+    public int szomszedosBombak=0;
+    
     private boolean felVanFedve=false;
-    
-    public void felfed(){
-    	this.felVanFedve=true;
-    	this.setBorderPainted(false);
-        this.setContentAreaFilled(false);
-        if(szomszedosBombak==0){
-        	this.setText("");
-        	felderit();
-        }else{
-        	this.setText(szomszedosBombak);
-        }
-    }	
+    public static Akna[][] aknaMezo =  new Akna[10][10];
 
-    public void megjelol(){
-    	
-    }
-    
-    public void felderit(){
-    	
-    }    
-    
-    
     public static void main(String[] args){
         JFrame theBoard = new JFrame();
         theBoard.setSize(400,400);
         theBoard.setLocationRelativeTo(null);
-        theBoard.setResizable(false);
+        //theBoard.setResizable(false);
         theBoard.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         theBoard.setTitle("Aknakereso");
         
         JPanel thePanel = new JPanel();
+        thePanel.setLayout(new GridLayout(10,10,0,0));
+        //JTextField textField1 = new JTextField("Type Here", 15);
+        //JLabel label1 = new JLabel("valami");
+        //JButton button1 = new JButton("Send");
+        ListenForMouse lForMouse = new ListenForMouse();
+        //button1.addActionListener(lForButton);
         
-        JTextField textField1 = new JTextField("Type Here", 15);
-        JLabel label1 = new JLabel("valami");
-        JButton button1 = new JButton("Send");
-        ListenForButton lForButton = new ListenForButton();
-        button1.addActionListener(lForButton);
+        //thePanel.add(label1);
+        //thePanel.add(button1);
+        //thePanel.add(textField1);
+        for(int i=0;i<10;i++){
+        	for(int j=0;j<10;j++){
+        		aknaMezo[i][j] = new Akna(i, j);
+        		thePanel.add(aknaMezo[i][j]);
+        		aknaMezo[i][j].addMouseListener(lForMouse);
+        	}
+        }
+        int dbBomba=0;
+        do{
+        	int xRandom = (int)(Math.random()*9);
+        	int yRandom = (int)(Math.random()*9);
+        	if (!(aknaMezo[xRandom][yRandom].vanBomba)){
+        		aknaMezo[xRandom][yRandom].vanBomba=true;
+        		aknaMezo[xRandom][yRandom].szomszedosBombak=0;
+        		aknaMezo[xRandom][yRandom].setText("B");
+        		dbBomba++;
+        		System.out.println(xRandom +" - "+yRandom);
+        		aknaMezo[xRandom][yRandom].szomszedokErtesitese();
+        	}
+        }while(dbBomba<10);
         
-        thePanel.add(label1);
-        thePanel.add(button1);
-        thePanel.add(textField1);
         
         theBoard.add(thePanel);
         theBoard.setVisible(true);
         
         System.out.println("Ez mar fut");
-    }
-}
-
-
-   	// Implements ActionListener so it can react to events on components
-    	private class ListenForButton implements ActionListener{
-	     
-	    // This method is called when an event occurs
-	     
-	    public void actionPerformed(ActionEvent e){
-	         
-	        // Check if the source of the event was the button
-	         
-	        if(e.getSource() == button1){
-	             
-	            //buttonClicked++;
-	             
-	            // Change the text for the label
-	             
-	            textArea1.append("Button clicked " + buttonClicked + " times\n" );
-	             
-            // e.getSource().toString() returns information on the button
-	            // and the event that occurred
-	                 
-	        }
-	         
-    }
+    } //main
+    
+    
+    public Akna(int xPos, int yPos){
+    	this.xPosition = xPos;
+    	this.yPosition = yPos;
     }
     
-    	// By using KeyListener you can track keys on the keyboard
-	private class ListenForKeys implements KeyListener{
-		
-		// Handle the key typed event from the text field.
-	    public void keyTyped(KeyEvent e) {
-	    	textArea1.append("Key Hit: " + e.getKeyChar() + "\n"); 
-	    }
+    public void felfed(){
+    	if(!(this.getFelVanFedve())){
+    		this.setFelVanFedve(true);
+    	   	//this.setBorderPainted(false);
+    		this.setContentAreaFilled(false);
+    		if(this.szomszedosBombak==0){
+    			if (!(this.vanBomba)){
+    				this.setText("");
+    				this.felderit(this.xPosition,this.yPosition);
+    			}else {
+    				this.setText("B");
+    				//System.exit(0);
+    			}
+    			
+    		}else{
+    			this.setText(Integer.toString(this.szomszedosBombak));
+    		}
+    	}	
+    }	//felfed
 
-	    // Handle the key-pressed event from the text field.
-	    public void keyPressed(KeyEvent e) {
-	        
-	    }
+    public void megjelol(){
+    	this.setText("*");
+    	
+    }
+    
+    public void felderit(int x, int y){
+    	for (int i=-1;i<2;i++){
+    		for (int j=-1;j<2;j++){
+    			if(this.xPosition+i>=0 && this.xPosition+i<=9 && this.yPosition+j>=0 && this.yPosition+j<=9 && !(aknaMezo[this.xPosition+i][this.yPosition+j].getFelVanFedve())) {
+    	    			aknaMezo[this.xPosition+i][this.yPosition+j].felfed();
+    	    	}
+    		}
+    	}
+    }    
+    
+    public void szomszedokErtesitese(){
+    	for (int i=-1;i<2;i++){
+    		for (int j=-1;j<2;j++){
+    			if((this.xPosition+i>=0 && this.xPosition+i<=9 && this.yPosition+j>=0 && this.yPosition+j<=9) && !(aknaMezo[this.xPosition+i][this.yPosition+j].vanBomba)) {
+    	    		aknaMezo[this.xPosition+i][this.yPosition+j].szomszedosBombak+=1;
+    	    		aknaMezo[this.xPosition+i][this.yPosition+j].setText(Integer.toString(aknaMezo[this.xPosition+i][this.yPosition+j].szomszedosBombak));
+    	    	}
+    		}
+    	}
+    }
 
-	    // Handle the key-released event from the text field.
-	    public void keyReleased(KeyEvent e) {
-	        
-	    }
-		
-	}
 	
-	private class ListenForMouse implements MouseListener{
+	public boolean getFelVanFedve() {
+		return felVanFedve;
+	}
 
-		// Called when a mouse button is clicked
+	
+	public void setFelVanFedve(boolean felVanFedve) {
+		this.felVanFedve = felVanFedve;
+	}
+
+
+}
+
+	class ListenForMouse implements MouseListener{
 		
 		public void mouseClicked(MouseEvent e) {
-			
-			textArea1.append("Mouse Panel Pos: " + e.getX() + " " + e.getY() + "\n");
-			textArea1.append("Mouse Screen Pos: " + e.getXOnScreen() + " " + e.getYOnScreen() + "\n"); 
-			textArea1.append("Mouse Button: " + e.getButton()  + "\n"); 
-			textArea1.append("Mouse Clicks: " + e.getClickCount()  + "\n");
-			
+			if(e.getButton()==3){
+				((Akna)e.getSource()).megjelol();
+			} else{
+				((Akna)e.getSource()).felfed();
+			}
 		}
 
-		// Called when the mouse enters the component assigned
-		// the MouseListener
-		
+		@Override
 		public void mouseEntered(MouseEvent arg0) {
 			// TODO Auto-generated method stub
 			
 		}
 
-		// Called when the mouse leaves the component assigned
-		// the MouseListener
-		
+		@Override
 		public void mouseExited(MouseEvent arg0) {
 			// TODO Auto-generated method stub
 			
 		}
 
-		// Mouse button pressed
-		
+		@Override
 		public void mousePressed(MouseEvent arg0) {
 			// TODO Auto-generated method stub
 			
 		}
 
-		// Mouse button released
-		
+		@Override
 		public void mouseReleased(MouseEvent arg0) {
 			// TODO Auto-generated method stub
 			
 		}
+
 		
 	}
 	     
