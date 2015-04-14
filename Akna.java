@@ -16,11 +16,46 @@ public class Akna{
         theBoard.setTitle("Aknakereso");
         
         JPanel thePanel = new JPanel();
-        JLabel label1 = new JLabel("valami");
-        thePanel.add(label1);
-        theBoard.add(thePanel);
         
+        JTextField textField1 = new JTextField("Type Here", 15);
+        JLabel label1 = new JLabel("valami");
+        JButton button1 = new JButton("Send");
+        ListenForButton lForButton = new ListenForButton();
+        button1.addActionListener(lForButton);
+        
+        thePanel.add(label1);
+        thePanel.add(button1);
+        thePanel.add(textField1);
+        
+        theBoard.add(thePanel);
+        theBoard.setVisible(true);
         
         System.out.println("Ez mar fut");
     }
 }
+
+
+   
+    private class ListenForButton implements ActionListener{
+	     
+	    // This method is called when an event occurs
+	     
+	    public void actionPerformed(ActionEvent e){
+	         
+	        // Check if the source of the event was the button
+	         
+	        if(e.getSource() == button1){
+	             
+	            //buttonClicked++;
+	             
+	            // Change the text for the label
+	             
+	            textArea1.append("Button clicked " + buttonClicked + " times\n" );
+	             
+            // e.getSource().toString() returns information on the button
+	            // and the event that occurred
+	                 
+	        }
+	         
+    }
+	     
